@@ -25,7 +25,7 @@ services:
       - "11434:11434"
     # 👇 mount your existing local models
     volumes:
-      - "C:\\Users\\EF488ZW\\.ollama:/root/.ollama"
+      - ${USERPROFILE}/.ollama:/root/.ollama  
     command: >
       bash -c "
       ollama serve --host 0.0.0.0

@@ -10,7 +10,7 @@ import inspect
 import os
 import time
 import aiohttp
-
+import sys
 
 # your models module - adjust path if needed (app.models or models)
 from services.models import AttackExecution, engine, create_db_and_tables
@@ -42,7 +42,7 @@ class AzureProvider:
         self.endpoint = payload.target_endpoint_url
         self.api_version = payload.target_labels.get("api_version") or os.getenv("AZURE_OPENAI_API_VERSION")
         # prefer target.api_key then env var
-        self.api_key = getattr(payload, "targte_api_key") or os.getenv("AZURE_OPENAI_API_KEY")
+        self.api_key = getattr(payload, "target_auth_method") or os.getenv("AZURE_OPENAI_API_KEY")
 
         if not self.api_key:
             raise RuntimeError(f"Azure API key not found for target {getattr(payload, 'name', '<unknown>')}")

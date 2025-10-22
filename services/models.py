@@ -4,7 +4,7 @@ from datetime import datetime
 
 from sqlmodel import SQLModel, Field, create_engine
 from sqlalchemy import Column, JSON
-
+import os
 
 class AttackExecution(SQLModel, table=True):
     __tablename__ = "attack_execution"
@@ -53,8 +53,12 @@ class AttackExecution(SQLModel, table=True):
     updated_at: str = Field(default_factory=datetime.utcnow)
 
 # ---------- DB Setup ----------
-DATABASE_URL = "sqlite:///./redteam_simple.db"
-engine = create_engine(DATABASE_URL, echo=False, connect_args={"check_same_thread": False})
+# DB URL from env (default to local sqlite file)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./redteam_simple.db")
+
+# engine
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+engine = create_engine(DATABASE_URL, echo=False, connect_args=connect_args)
 
 def create_db_and_tables() -> None:
     SQLModel.metadata.create_all(engine)

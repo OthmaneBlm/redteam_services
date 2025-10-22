@@ -77,7 +77,7 @@ Use this JSON as the request body when creating/launching a probe in the backend
   "target_name": "AZURE_OPENAI"/ or "CUSTOM_QA or "OLLAMA"
   "target_description": "",
   "target_endpoint_url": "https://azure####.openai.azure.com/",
-  "target_auth_method": "none",
+  "target_auth_method": "put the key for azureopenia trial",
   "target_endpoint_type": "OAI",
   "target_input_field": "question",
   "target_output_field": "answer",
@@ -91,8 +91,8 @@ Use this JSON as the request body when creating/launching a probe in the backend
   "target_additional_params": {},
   "target_labels": {
     "environment": "production",
-    "model": "gpt-4"
+    "model": "gpt-4",
+    "api_version": for azure openai
   }
 }
 
-for AZURE_OPENAI add targte_api_key (temporarily)

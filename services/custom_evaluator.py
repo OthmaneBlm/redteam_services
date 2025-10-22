@@ -5,6 +5,7 @@ from utils.logger import setup_logging
 from deepeval.models import DeepEvalBaseLLM
 import re
 import json
+import os
 # Configure logging
 
 logger = setup_logging()
@@ -57,10 +58,11 @@ def extract_json_string(response: str) -> str:
 
 class AttackSimulator(DeepEvalBaseLLM):
     def __init__(self):
-        self.api_url = "http://localhost:11434/api/chat"
+        self.api_url = os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/chat")
+        self.model_name = os.getenv("SIMULATOR_MODEL_NAME", "huihui_ai/qwen3-abliterated:0.6b")
         
     def get_model_name(self):
-        return "huihui_ai/qwen3-abliterated:0.6b"
+        return self.model_name
 
     def load_model(self):
         return self
@@ -68,7 +70,7 @@ class AttackSimulator(DeepEvalBaseLLM):
     def generate(self, prompt: str) -> str:
         logger.info(f"Sending prompt to Ollama: {prompt}")
         payload = {
-            "model": "huihui_ai/qwen3-abliterated:0.6b",
+            "model": self.model_name,
             "messages": [{"role": "user", "content": prompt}]
         }
 
@@ -107,10 +109,11 @@ class AttackSimulator(DeepEvalBaseLLM):
     
 class AttackEvaluator(DeepEvalBaseLLM):
     def __init__(self):
-        self.api_url = "http://localhost:11434/api/chat"
+        self.api_url =os.getenv("OLLAMA_API_URL", "http://localhost:11434/api/chat")
+        self.model_name = os.getenv("EVALUATOR_MODEL_NAME", "jaahas/qwen3-abliterated:4b")
         
     def get_model_name(self):
-        return "jaahas/qwen3-abliterated:4b"
+        return self.model_name
 
     def load_model(self):
         return self
@@ -118,7 +121,7 @@ class AttackEvaluator(DeepEvalBaseLLM):
     def generate(self, prompt: str) -> str:
         logger.info(f"Sending prompt to Ollama: {prompt}")
         payload = {
-            "model": "jaahas/qwen3-abliterated:4b",
+            "model": self.model_name,
             "messages": [{"role": "user", "content": prompt}]
         }
 

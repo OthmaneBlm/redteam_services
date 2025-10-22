@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  fastapi:
+    build: .
+    container_name: fastapi_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:////app/redteam_simple.db
+      OLLAMA_API_URL: http://ollama:11434/api/chat
+      OLLAMA_EVALUATION_MODEL: jaahas/qwen3-abliterated:4b
+      OLLAMA_ATTACK_MODEL: huihui_ai/qwen3-abliterated:0.6b
+    depends_on:
+      - ollama
+    volumes:
+      - ./:/app  # mount your app & DB
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_service
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    # 👇 mount your existing local models
+    volumes:
+      - "C:\\Users\\EF488ZW\\.ollama:/root/.ollama"
+    command: >
+      bash -c "
+      ollama serve --host 0.0.0.0
+      "
